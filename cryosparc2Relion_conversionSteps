@@ -1,0 +1,43 @@
+micrograph path:
+/media/nfsraid01/Data/user/K4/SLAC_Q4_apo_20201116/aligned/motioncor2/1.2.3
+
+
+Path of .mrcs links corresponding to particle coordinates from CS:
+/media/nfsraid01/Processed/user/k4/relion/conversionFromCS/CSextract
+
+
+
+
+1. Python3 /usr/local/pyem/csparc2star.py particleFile.cs passthroughFIle.cs desiredName.star --micrograph-path /media/nfsraid01/Data/user/K4/SLAC_Q4_Ca4_20201116/aligned/motioncor2/1.2.3/ --swapxy --boxsize 300
+
+2. sed -i 's/_particles.mrc/_particles.mrcs/g' J136.star
+3. ln -s <directory where picked particles from CS in .mrc format> .
+
+4.
+#Rename all .mrc as .mrcs
+nano rename.sh
+
+Step1: Create a shell script rename.sh under current directory with the following code:
+--------------------------------------
+#!/bin/bash
+
+for file in $(find . -name "*$1"); do
+  mv "$file" "${file%$1}$2"
+done
+-------------------------------------
+Step2: Run it by ./rename.sh .old .new
+
+Eg. ./rename.sh .html .txt
+
+5. Open the .star file and replace .mrcs file path with new absolute path (of the .mrcs links created).
+    If the particle file is too big then gedit won’t work. Use the following command:
+    sed -i ‘s@J387/extract/@/sdf/group/cryoem/g/CT23/caV/particle/@g’ filename.star
+
+    (normal sed command has been replaced ‘/’ with ‘@’, because string that needed change has / character in it)
+
+6. Edit final STAR file and include _rlnImageSize #col_number  (enter boxSize in the ‘number’ column).
+7. Similarly enter _rlnImageDimensionality" (should be 2 for SPA), if not present already.
+
+8. Check _rlnRandomSubset values: if all are 1 or 2 then delete the column and column identifier in the star file (this is a bug in the conversion program, if not done refinement will fail).
+
+
