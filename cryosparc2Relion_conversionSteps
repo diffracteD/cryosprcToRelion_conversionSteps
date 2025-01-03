@@ -31,7 +31,7 @@ Eg. ./rename.sh .html .txt
 
 5. Open the .star file and replace .mrcs file path with new absolute path (of the .mrcs links created).
     If the particle file is too big then gedit won’t work. Use the following command:
-    sed -i ‘s@J387/extract/@/sdf/group/cryoem/g/CT23/caV/particle/@g’ filename.star
+    sed -i 's@J387/extract/@/sdf/group/cryoem/g/CT23/caV/particle/@g' filename.star
 
     (normal sed command has been replaced ‘/’ with ‘@’, because string that needed change has / character in it)
 
